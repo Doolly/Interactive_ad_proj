@@ -45,9 +45,10 @@ void draw() {
           float DRoation = atan2(dy, dx);   
           float WRotation = radians(DRoation/PI*180); 
 
-          pos[i+j*rows].x+= round( count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mouseX, mouseY) * cos(WRotation) ); //x position increment
-          pos[i+j*rows].y+= round( count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mouseX, mouseY) * sin(WRotation) ); //y position increment
+          pos[i+j*rows].x+= round( count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mouseX, mouseY) * cos(WRotation) ); //x position increment in int
+          pos[i+j*rows].y+= round( count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mouseX, mouseY) * sin(WRotation) ); //y position increment in int
         } else {
+          println(tar_speed[i+j*rows].x);
           pos[i+j*rows].x = lerp(pos[i+j*rows].x, target[i+j*rows].x, tar_speed[i+j*rows].x);  //x position derivated 
           pos[i+j*rows].y = lerp(pos[i+j*rows].y, target[i+j*rows].y, tar_speed[i+j*rows].y);  //y position derivated
         }
@@ -64,7 +65,6 @@ void draw() {
       color c = img.pixels[loc];         // Grab the color of selected image
       strokeWeight(cellSize);
       stroke(c);
-
       point(pos[i+j*rows].x, pos[i+j*rows].y);
     }
   }
