@@ -22,7 +22,7 @@ void setup() {
   target=new PVector[rows*cols];
   tar_speed=new PVector[rows*cols];
   img = loadImage("kusama.png");
-  //smooth(2);
+  //smooth(8);
   //noStroke();
   //fill(255);
   //frameRate(30);
@@ -44,7 +44,7 @@ void draw() {
     //window opacity ctrl
     fill(0, 50);
     rect(0, 0, width, height);
-
+ 
     for (int j=0; j<cols; j++) { //for loop for spreading
       for (int i=0; i<rows; i++) {
 
