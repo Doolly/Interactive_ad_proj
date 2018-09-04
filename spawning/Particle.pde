@@ -20,25 +20,22 @@ class Particle {
     display();
   }
 
-  // Method to update position
-  void update() {
+  void update() {   // Method to update position
     //    velocity.add(acceleration);
-    if (position.dist(origin_pos)>30) {
+    if (position.dist(origin_pos)>30) {  //거리제한
       velocity.mult(-1);
     }
     position.add(velocity);
     lifespan -= 2.0;
   }
 
-  // Method to display
-  void display() {
+  void display() {   // Method to display
     stroke(255, lifespan);
     fill(255, lifespan);
     ellipse(position.x, position.y, 8, 8);
   }
 
-  // Is the particle still useful?
-  boolean isDead() {
+  boolean isDead() {    // Is the particle still useful?
     return (lifespan < 0.0);
   }
 }
