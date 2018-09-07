@@ -53,6 +53,7 @@ void draw() {
           float dy= pos[i+j*rows].y - mouseY;
           float DRoation = atan2(dy, dx);   
           float WRotation = radians(DRoation/PI*180); 
+
           
           //타원 공식 집어 넣기
           pos[i+j*rows].x+= round( count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mouseX, mouseY) * cos(WRotation) );    //마우스 포인트된 거리에 비례해서 이동후 정수변환
