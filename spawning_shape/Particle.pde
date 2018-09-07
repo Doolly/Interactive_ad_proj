@@ -29,8 +29,8 @@ class Particle {
     part.vertex(+partSize/2, +partSize/2, star.width, star.height);
     part.vertex(-partSize/2, +partSize/2, 0, star.height);
     
-//    part.resetMatrix();
-//    part.translate(position.x, position.y); 
+    part.resetMatrix();
+    part.translate(position.x, position.y); 
     
     part.endShape();
   }
