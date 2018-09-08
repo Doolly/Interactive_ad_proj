@@ -20,6 +20,8 @@ float mx[] = new float[num];
 float my[] = new float[num];
 float deg;
 
+boolean colorDepth = false;
+boolean ir = false;
 void setup() {
   size(1280, 1040);
   kinect = new Kinect(this);
@@ -29,14 +31,14 @@ void setup() {
   kinect.initDepth();
   kinect.initVideo();
   kinect.enableIR(false);
-
+  kinect.enableColorDepth(colorDepth);
   deg = kinect.getTilt();
 }
 
 void draw() {
   background(255);
   tracker.track();  // Run the tracking analysis
-    tracker.display();     // Show the image
+  tracker.display();     // Show the image
   image(kinect.getVideoImage(), 640, 0);
   image(kinect.getDepthImage(), 0, 540);
   fill(255);
@@ -56,7 +58,9 @@ void draw() {
   int t = tracker.getThreshold();
   fill(0);
   text("threshold: " + t + "    " +  "framerate: " + int(frameRate) + "    " + 
-    "RIGHT increase threshold, LEFT decrease threshold", 10, 500);
+    "RIGHT increase threshold, LEFT decrease threshold"+ 
+    "Press 'i' to enable/disable between video image and IR image,  " +
+    "Press 'c' to enable/disable between color depth and gray scale depth,  ", 10, 500);
 
 
 
@@ -73,15 +77,20 @@ void draw() {
 // Adjust the threshold with key presses
 void keyPressed() {
   int t = tracker.getThreshold();
-  if (key == CODED) {
+  if (key == 'c') {
+    colorDepth = !colorDepth;
+    kinect.enableColorDepth(colorDepth);
+  } else if (key == 'i') {
+    ir = !ir;
+    kinect.enableIR(ir);
+  } else if (key == CODED) {
     if (keyCode == RIGHT) {
       t+=5;
       tracker.setThreshold(t);
     } else if (keyCode == LEFT) {
       t-=5;
       tracker.setThreshold(t);
-    }
-    else if (keyCode == UP) {
+    } else if (keyCode == UP) {
       deg++;
     } else if (keyCode == DOWN) {
       deg--;
