@@ -21,8 +21,7 @@ class ParticleSystem {
     // Cycle through the ArrayList backwards, because we are deleting while iterating
     for (int i = particles.size()-1; i >= 0; i--) {
       Particle p = particles.get(i);
-      p.update();
-      p.display();
+      p.run();
       if (p.isDead()) {
         particles.remove(i);
       }

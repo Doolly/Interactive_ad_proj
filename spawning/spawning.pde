@@ -1,4 +1,4 @@
-
+//update + display = run
 ArrayList<ParticleSystem> systems;
 
 void setup() {

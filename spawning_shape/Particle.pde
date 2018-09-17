@@ -28,10 +28,10 @@ class Particle {
     part.vertex(+partSize/2, -partSize/2, star.width, 0);
     part.vertex(+partSize/2, +partSize/2, star.width, star.height);
     part.vertex(-partSize/2, +partSize/2, 0, star.height);
-    
+
     part.resetMatrix();
     part.translate(position.x, position.y); 
-    
+
     part.endShape();
   }
 
@@ -39,13 +39,17 @@ class Particle {
     return part;
   }
 
+  void run () {
+    update();
+    display();
+  }
   void update() {   // Method to update position
     //    velocity.add(acceleration);
     //if (position.dist(origin_pos)>30) {  //거리제한
     //  velocity.mult(-1);
     //}
     part.setTint(color(255, 255, 255, lifespan));
-     
+
     part.translate(velocity.x, velocity.y);
 
     lifespan -= 2.0;
