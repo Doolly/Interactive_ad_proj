@@ -38,10 +38,6 @@ class Particle {
   PShape getShape() {
     return part;
   }
-  void run() {
-    update();
-    display();
-  }
 
   void update() {   // Method to update position
     //    velocity.add(acceleration);
