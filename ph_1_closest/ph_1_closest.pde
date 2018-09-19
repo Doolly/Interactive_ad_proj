@@ -26,7 +26,7 @@ void draw() {
       // get the location in the depthVals array
       int loc = x+(y*depthCam.width);
       // if the depth values of the sampled image are in range
-      if (depthVals[loc]< 900) {
+      if (depthVals[loc] > 100 && depthVals[loc]< 900) {
         //let the pixel value in the result image be white
         result.pixels[loc] = color(255, 0, 0);
       } else {

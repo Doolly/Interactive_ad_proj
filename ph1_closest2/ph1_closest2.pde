@@ -10,7 +10,6 @@ void setup() {
  kinect = new SimpleOpenNI(this);
  kinect.setMirror(true);
  kinect.enableDepth();
- 
 }
 
 void draw() {
@@ -19,16 +18,15 @@ void draw() {
  
  int[] depthValues = kinect.depthMap();
  // for each row
- for (int y = 0; y< width; y++) {
+ for (int y = 0; y< height; y++) {
    //for each pixel in each row
-   for (int x = 0; x< height; x++) {
+   for (int x = 0; x< width; x++) {
      //calculate the index for the currentPixel
-     int i = x + y * height;
+     int i = x + y * width;
      //retrieve the depthValue for that pixel
      int currentDepthValue = depthValues[i];
      
-     if (currentDepthValue > 0 && currentDepthValue < closestValue) {
-        
+     if (currentDepthValue > 100 && currentDepthValue < closestValue) {
         closestValue = currentDepthValue;
         closestX = x;
         closestY = y; 
