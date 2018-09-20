@@ -5,7 +5,7 @@ Particle[] particles = new Particle[700];
 
 void setup() {
   // fullScreen();
-  size(1920, 800);
+  size(640, 480);
   noStroke();
   //stroke(204, 102, 0);
 

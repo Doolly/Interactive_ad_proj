@@ -22,9 +22,9 @@ class Particle {
 
   void update() {   // Method to update position
     //    velocity.add(acceleration);
-    if (position.dist(origin_pos)>30) {  //거리제한
-      velocity.mult(-1);
-    }
+    //if (position.dist(origin_pos)>30) {  //거리제한
+    //  velocity.mult(-1);
+    //}
     position.add(velocity);
     lifespan -= 2.0;
   }

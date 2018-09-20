@@ -7,6 +7,8 @@ PImage img;
 int closestValue = 8000;
 int closestX;
 int closestY;
+int close_d = 400;
+int far_d = 1100;
 
 int cellSize = 4;  //입자 크기 파라미터
 int rows, cols;
@@ -49,16 +51,18 @@ void phase1_kinect_update() {
       }
     }
   }
-  image(kinect.userImage(),0,0,width,height);
+  
+  image(kinect.userImage(), 0, 0, width, height);
   //image(kinect.rgbImage(),0,0,width,height);
   fill (255, 0, 0);
   ellipse(closestX, closestY, 25, 25);
+  number=map(closestValue, close_d, far_d, 5, 10);
 }
 
 
 void phase1_DP_update(int mx, int my) {
 
-  if (closestValue > 200 && closestValue < 1100) {
+  if (closestValue > close_d && closestValue < far_d) {
     count+=number;
     fill(0, 60);   //window opacity ctrl  잔상 조절, 배경 검정
     rect(0, 0, width, height);

@@ -2,7 +2,7 @@
 ArrayList<ParticleSystem> systems;
 
 void setup() {
-  size(1920, 1080);
+  size(640, 480);
   systems = new ArrayList<ParticleSystem>();
 }
 
