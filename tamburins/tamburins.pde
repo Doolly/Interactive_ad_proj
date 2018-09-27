@@ -14,14 +14,14 @@ PImage result;
 /*------ Functions ------*/
 
 /*------ Global Variables ------*/
-int phase = 2;
+int phase = 3;
 int time_ms;
 int time_stamp;
 
 
 void setup() {
-  //size(1440, 800, P2D);
-  size(640, 540, P2D);
+  size(1440, 800, P2D);
+  //size(640, 540, P2D);
   //fullScreen();
   //frameRate(30);
   smooth(4);
@@ -67,5 +67,6 @@ void draw() {
     text_1();
   }
   else if (phase == 3) {
+  phase2_kinect_update();
   }
 }
