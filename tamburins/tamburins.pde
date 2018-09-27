@@ -14,13 +14,14 @@ PImage result;
 /*------ Functions ------*/
 
 /*------ Global Variables ------*/
-int phase = 1;
+int phase = 2;
 int time_ms;
 int time_stamp;
 
 
 void setup() {
-  size(1440, 800, P2D);
+  //size(1440, 800, P2D);
+  size(640, 540, P2D);
   //fullScreen();
   //frameRate(30);
   smooth(4);
@@ -38,11 +39,12 @@ void setup() {
 
   result = createImage(width, height, RGB);
   phase1_setup ();
+  text_setup();
+  lastTime = millis();
 }
 
 void draw() {
   background(0, 60);
-  println("phase = ", phase);
 
   if (phase == -1) {
     routine_movie.loop();
@@ -61,5 +63,9 @@ void draw() {
     phase1_kinect_update();
     phase1_DP_update(closestX, closestY);
     phase1_display();
+  } else if (phase == 2) {
+    text_1();
+  }
+  else if (phase == 3) {
   }
 }
