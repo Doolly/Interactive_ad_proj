@@ -3,6 +3,9 @@
 // 풀리면 손에 모였다가 털면 흩어짐-> 반복    (손벡터에 질량을?)
 // 풀리면 손에 모였다 박수치면 터짐-> 반복
 
+// g값을 시스템에서 관장 하다 그 g값만 터지게 색을 넣는것도 시스템에서 관장
+// 메인에선 몇개가 생기는지만 관장
+
 class Particle {
   PVector position;
   PVector velocity;
@@ -13,16 +16,18 @@ class Particle {
   float lifespan;
   float m;
   float g;
-  float sys_size;
 
-  Particle(PVector o, PVector h) {
+
+  Particle(PVector o, float _m) {
     //  acceleration = new PVector(0, 0.05);
     velocity = new PVector(random(-1, 1), random(-1, 1));
     origin_pos = o.copy();
     position = o.copy();
-    hand_pos = h.copy();
-    g = 0.005;
-    sys_size = 100;
+    acceleration = new PVector(0, 0);
+    m = _m;
+    //hand_pos = h.copy();
+    g = -0.005;
+
     lifespan = 255.0;
   }
 
@@ -32,34 +37,28 @@ class Particle {
 
   void updatePartialAcceleration(Particle neighbor) {
     if (neighbor != this) {
-      //     PVector dist = PVector.sub(position, neighbor.position);
+      PVector dist = PVector.sub(position, neighbor.position);
       float d = PVector.dist(position, neighbor.position);
 
       if (d < 1) d = 1;          //너무 가까우면 1로봄 common이 너무 커지지 않게
 
-      float common = m * neighbor.m / d;  //m의 곱을 거리로 나눔, m이 커봐야 8이니까 common은 최대 64
-      acceleration.add(PVector.mult(position, common, acceleration));
+      float common = abs(m) * abs(neighbor.m) / d;  //m의 곱을 거리로 나눔, m이 커봐야 8이니까 common은 최대 64
+      //acceleration.add(PVector.mult(position, common, acceleration));
+      acceleration = PVector.add(dist.mult(common), acceleration);
     }
   }
 
-  boolean poped() {
-    float d = PVector.dist(origin_pos, hand_pos);
-    return (d<sys_size);
+  void reverseGravity() {
+    g *= -1;
   }
 
   void updateVelocityAndPosition() {
-    if (poped()) {
-      velocity = PVector.add(velocity.mult(0.99), acceleration.mult(g));
-    } else {
-      velocity = PVector.add(velocity.mult(0.99), acceleration.mult(g));       //PVector.add(velocity.mult(0.99), acceleration.mult(0.005), velocity);
-      if (position.dist(origin_pos)>30) {  //거리제한
-        velocity.mult(-1);
-      }
+    velocity = PVector.add(velocity.mult(0.99), acceleration.mult(g));
 
-      position.add(velocity);
+    position.add(velocity);
 
-      if ((position.x < 0 && velocity.x < 0) || (position.x > width  && velocity.x > 0))   velocity.mult(-1);   //벽에 튕기는 코드
-      if ((position.y < 0 && velocity.y < 0) || (position.y > height && velocity.y > 0))   velocity.mult(-1);
-    }
+    if ((position.x < 0 && velocity.x < 0) || (position.x > width  && velocity.x > 0))   velocity.x = -velocity.x;   //벽에 튕기는 코드
+    if ((position.y < 0 && velocity.y < 0) || (position.y > height && velocity.y > 0))   velocity.y = -velocity.y;
+    //}
   }
 }
