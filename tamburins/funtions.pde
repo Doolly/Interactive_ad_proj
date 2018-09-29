@@ -11,7 +11,7 @@ void keyPressed() {
   } else if (key == 'i') {
   } else if (key == CODED) {
     if (keyCode == RIGHT) {
-      phase ++;
+      seq ++;
     } else if (keyCode == LEFT) {
     } else if (keyCode == UP) {
     } else if (keyCode == DOWN) {

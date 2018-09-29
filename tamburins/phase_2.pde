@@ -1,4 +1,3 @@
-
 PVector leftHand = new PVector();
 PVector rightHand = new PVector();
 PVector pre_leftHand = new PVector();
@@ -38,7 +37,8 @@ void phase2_kinect_update() {
 void phase2_DP_update() {
 }
 
-
+void getMotion(){
+}
 void drawSkeleton(int userId) {
   noStroke();
   fill(255, 0, 0);
@@ -73,7 +73,6 @@ void drawJoint(int userId, int jointID) {
   PVector pixelPosition = PVectorPlus.mult(convertedJoint, normalizedPosition); //변환
   ellipse(pixelPosition.x, pixelPosition.y, 15, 15);
 }
-//Calibration not required
 
 void onNewUser(SimpleOpenNI kinect, int userID) {
   println("Start skeleton tracking");
