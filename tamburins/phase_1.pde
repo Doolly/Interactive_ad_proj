@@ -53,37 +53,61 @@ void phase1_kinect_update() {
       }
     }
   }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  int[] userList = kinect.getUsers();
+  if (userList.length>0) { 
+    userMap = kinect.userMap();
+    userImage.loadPixels(); //현재 사이즈로 부르고
+    userImage.resize(640, 480); // 줄였다가
+    for (int y = 0; y< 480; y++) { //때려박고
+      for (int x = 0; x< 640; x++) { 
+        int i = x + y * 640; 
+        if (userMap[i]!=0) { 
+          userImage.pixels[i] = userImage.pixels[i] = color(200, 2, 200);
+        } else {
+          userImage.pixels[i] = color(0);
+        }
+      }
+    }
+    userImage.updatePixels();  //갱신된 배열값들을 이미지로 로드
+    userImage.resize(width, height); // 다시 늘려서
+  }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void phase1_DP_update(int mx, int my) {
-    count+=number;
-    for (int j=0; j<cols; j++) { //for loop for spreading
-      for (int i=0; i<rows; i++) {
-        if (dist(pos[i+j*rows].x, pos[i+j*rows].y, mx, my)<count) { 
-          float dx= pos[i+j*rows].x - mx;
-          float dy= pos[i+j*rows].y - my;
-          float DRoation = atan2(dy, dx);
-          float WRotation = radians(DRoation/PI*180); 
-          //타원 공식 집어 넣기
-          pos[i+j*rows].x+= round( count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mx, my) * cos(WRotation) );    //마우스 포인트된 거리에 비례해서 이동후 정수변환
-          pos[i+j*rows].y+= round( 2*count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mx, my) * sin(WRotation) );
-        } else {   //너무 멀면 원상복귀
-          pos[i+j*rows].x = lerp(pos[i+j*rows].x, target[i+j*rows].x, tar_speed[i+j*rows].x);  //현재 위치부터 타겟까지 타겟스피드 비율만큼 가까워짐 
-          pos[i+j*rows].y = lerp(pos[i+j*rows].y, target[i+j*rows].y, tar_speed[i+j*rows].y);
-        }
+  count+=number;
+  for (int j=0; j<cols; j++) { //for loop for spreading
+    for (int i=0; i<rows; i++) {
+      if (dist(pos[i+j*rows].x, pos[i+j*rows].y, mx, my)<count) { 
+        float dx= pos[i+j*rows].x - mx;
+        float dy= pos[i+j*rows].y - my;
+        float DRoation = atan2(dy, dx);
+        float WRotation = radians(DRoation/PI*180); 
+        //타원 공식 집어 넣기
+        pos[i+j*rows].x+= round( count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mx, my) * cos(WRotation) );    //마우스 포인트된 거리에 비례해서 이동후 정수변환
+        pos[i+j*rows].y+= round( 2*count/dist(pos[i+j*rows].x, pos[i+j*rows].y, mx, my) * sin(WRotation) );
+      } else {   //너무 멀면 원상복귀
+        pos[i+j*rows].x = lerp(pos[i+j*rows].x, target[i+j*rows].x, tar_speed[i+j*rows].x);  //현재 위치부터 타겟까지 타겟스피드 비율만큼 가까워짐 
+        pos[i+j*rows].y = lerp(pos[i+j*rows].y, target[i+j*rows].y, tar_speed[i+j*rows].y);
+      }
     }
   }
 }
 
 void phase1_DP() {
-  tint(120, 60);
-  image(kinect.depthImage(), 0, 0, width, height);
-  //image(kinect.userImage(), 0, 0, width, height);
+  tint(200, 60);
+  image(userImage, 0, 0); //최종 이미지 출력  int[] userList = kinect.getUsers();
+ 
+  //tint(120, 60);
+  //image(kinect.depthImage(), 0, 0, width, height);
+  
+  //fill(0, 60);   //window opacity ctrl  잔상 조절, 배경 검정
+  //rect(0, 0, width, height);
+
   noStroke();
   fill (255, 0, 0);
   ellipse(closestX, closestY, 15, 15);
-  //fill(0, 60);   //window opacity ctrl  잔상 조절, 배경 검정
-  //rect(0, 0, width, height);
 
   for (int j=0; j<cols; j++) { //for loop for displaying 
     for (int i=0; i<rows; i++) {

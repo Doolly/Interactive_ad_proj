@@ -8,6 +8,7 @@ void mousePressed() {
 void keyPressed() {
 
   if (key == 'c') {
+    mode = !mode;
   } else if (key == 'i') {
   } else if (key == CODED) {
     if (keyCode == RIGHT) {

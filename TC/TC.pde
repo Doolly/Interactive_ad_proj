@@ -26,6 +26,9 @@ class timing {
   
   timing() {
     frame_rate = 30;
+    alphaVal = 0;
+    opa_increse = 0;
+    time_stamp = 0;
   }
 
   void fadingCtrl(int interrupt_t, String IO) {

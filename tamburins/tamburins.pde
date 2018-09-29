@@ -1,8 +1,7 @@
 /*------ Headers to Include ------*/
 import processing.video.*;
 import SimpleOpenNI.*;
-
-
+import processing.opengl.*;
 /*------ Value Define ------*/
 
 /*------ Objects ------*/
@@ -14,22 +13,21 @@ PImage result;
 /*------ Functions ------*/
 
 /*------ Global Variables ------*/
-int seq = 2;
+int seq = 1;
 
 int time_ms;
 int time_stamp;
-int time_stamp_2;
-int [] userMap;
+
 
 void setup() {
   size(1440, 800, P3D);
-  //size(640, 540, P2D);
+  //size(640, 480,P2D);
   //fullScreen(P2D);
   
   smooth(4);
 
-  routine_movie = new Movie(this, "routine.mp4");
-  opening_movie = new Movie(this, "opening.mp4");
+  routine_movie = new Movie(this, "sample_video_1.mp4");
+  opening_movie = new Movie(this, "sample_video_2.mp4");
 
   kinect = new SimpleOpenNI(this);
   kinect.setMirror(true);
@@ -42,7 +40,6 @@ void setup() {
   phase1_setup ();
   text_setup();
   time_stamp = millis();
-  time_stamp_2 = millis();
   lastTime = millis();
 }
 
@@ -69,9 +66,10 @@ void draw() {
     }
     phase1_DP();
   } else if (seq == 2) {
-    text_2();
+    text_1();
    
   } else if (seq == 3) {
-    phase2_kinect_update();
+    //phase2_kinect_update();
+    phase_3();
   }
 }
