@@ -13,7 +13,7 @@ PImage result;
 /*------ Functions ------*/
 
 /*------ Global Variables ------*/
-int seq = 3;
+int seq = 1;
 
 int time_ms;
 int time_stamp;
