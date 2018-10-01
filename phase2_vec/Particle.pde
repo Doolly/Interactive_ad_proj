@@ -12,10 +12,11 @@ class Particle {
   PVector acceleration;
 
   PVector origin_pos;
-  PVector hand_pos;
+
   float lifespan;
   float m;
   float g;
+  float d;
 
 
   Particle(PVector o, float _m) {
@@ -25,29 +26,43 @@ class Particle {
     position = o.copy();
     acceleration = new PVector(0, 0);
     m = _m;
-    //hand_pos = h.copy();
     g = -0.005;
 
     lifespan = 255.0;
   }
 
   void resetAcceleration() {
-    acceleration.mult(0);
+    acceleration = PVector.mult(acceleration, 0);
   }
 
-  void updatePartialAcceleration(Particle neighbor) {
+  void updatePartialAcceleration(Particle neighbor, boolean clicked) {
     if (neighbor != this) {
       PVector dist = PVector.sub(position, neighbor.position);
-      float d = PVector.dist(position, neighbor.position);
-
+      d = PVector.dist(position, neighbor.position);
+      float common;
+        
       if (d < 1) d = 1;          //너무 가까우면 1로봄 common이 너무 커지지 않게
-
-      float common = abs(m) * abs(neighbor.m) / d;  //m의 곱을 거리로 나눔, m이 커봐야 8이니까 common은 최대 64
+      
+      if(clicked){
+        common = m * neighbor.m / (d*d);  //m의 곱을 거리로 나눔, m이 커봐야 8이니까 common은 최대 64
+      }
+      else{
+        common = abs(m) * abs(neighbor.m) / (d);  //m의 곱을 거리로 나눔, m이 커봐야 8이니까 common은 최대 64
+      }
+      
       //acceleration.add(PVector.mult(position, common, acceleration));
       acceleration = PVector.add(dist.mult(common), acceleration);
+     
+      
     }
   }
-
+ //void changeAcc(int _x, int _y){
+ //  //acceleration.x = _x;
+ //  //acceleration.y = _y;
+ //  velocity.x = random(0,1);
+ //  velocity.y = random(0,1);
+   
+ //}
   void reverseGravity() {
     g *= -1;
   }
@@ -57,8 +72,13 @@ class Particle {
 
     position.add(velocity);
 
-    if ((position.x < 0 && velocity.x < 0) || (position.x > width  && velocity.x > 0))   velocity.x = -velocity.x;   //벽에 튕기는 코드
-    if ((position.y < 0 && velocity.y < 0) || (position.y > height && velocity.y > 0))   velocity.y = -velocity.y;
-    //}
+    if ((position.x < 0 && velocity.x < 0) || (position.x > width  && velocity.x > 0)) {
+      velocity.x *= -1;   //벽에 튕기는 코드
+      acceleration.x *= -1;
+    }
+    if ((position.y < 0 && velocity.y < 0) || (position.y > height && velocity.y > 0)) {
+      velocity.y *= -1;
+      acceleration.y *= -1;
+    }
   }
 }

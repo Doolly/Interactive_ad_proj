@@ -4,7 +4,8 @@ class ParticleSystem {
   PVector hand_pos;
   float sys_size;
   boolean poped;
-  boolean relation_mouse = true;
+  boolean clicked;
+  boolean done;
   color c;
   //Particle[] particles = new Particle[700];
   float g = 0.005;
@@ -15,6 +16,8 @@ class ParticleSystem {
     c = color(random(0, 255), random(0, 255), random(0, 255));
     sys_size = 100;
     poped = false;
+    done = false;
+    clicked = false;
     for (int i = 0 ; i < num; i++){
       particles.add(new Particle(origin, randomGaussian() * 8));   //한종류의 군집
     }
@@ -40,27 +43,43 @@ class ParticleSystem {
   }
   
   void followMouse(PVector mouse){
-    if(poped){
-      Particle m = new Particle(mouse, 9);
+    if(poped && !clicked){
+      //Particle m = new Particle(mouse, 10);
       for (int i = 0 ; i <particles.size() -1 ; i ++ ){
         Particle p = particles.get(i);
         p.resetAcceleration();
-        p.updatePartialAcceleration(m);
+        //p.updatePartialAcceleration(m);
         p.updateVelocityAndPosition();
       }
     }
   }
   
   void reverseGravity(){
-    for(int i=0 ; i < particles.size()-1 ; i++){
+    for(int i=0 ; i < particles.size() ; i++){
       Particle p = particles.get(i);
       p.reverseGravity();
     }
-    //!relation_mouse;
+    if(!clicked){
+      clicked = true;
+    }
   }
-    
-  void run() {
-    for (int me = 0; me < particles.size()-1; me++) {
+  
+  void display(){
+    for (int i = 0; i < particles.size() ; i++) {
+      Particle p = particles.get(i);
+      p.updateVelocityAndPosition();
+
+      float opacity = p.velocity.mag() * 128;  //느리면 안보이게 빠르면 잘보이게
+
+      fill(c, opacity);  //반은 보라색
+      //fill(c);
+      ellipse(p.position.x, p.position.y, abs(p.m), abs(p.m));
+    }
+  }
+  
+  void run(PVector mouse) {
+    Particle m = new Particle(mouse, 15);
+    for (int me = 0; me < particles.size(); me++) {
       Particle p = particles.get(me);
       p.resetAcceleration();
       
@@ -69,24 +88,19 @@ class ParticleSystem {
           p.velocity.mult(-1);
         }
       }
-      else{
-        /*for (int neighbor = 0; neighbor < particles.size()-1; neighbor++) {
-          Particle p_neighbor = particles.get(neighbor);
-          p.updatePartialAcceleration(p_neighbor);
-          
-        }*/
+      if(poped && !clicked){  // Follow Mouse
+        p.updatePartialAcceleration(m, false);
+               
       }
+      if(clicked){  //
+     // p.changeAcc(5,5);
+        for (int neighbor = 0; neighbor < particles.size()-1; neighbor++) {
+          Particle p_neighbor = particles.get(neighbor);
+          p.updatePartialAcceleration(p_neighbor, true);
+        }
+      } 
     }
-
-    for (int i = 0; i < particles.size() -1 ; i++) {
-      Particle p = particles.get(i);
-      p.updateVelocityAndPosition();
-
-      float opacity = p.velocity.mag() * 128;  //느리면 안보이게 빠르면 잘보이게
-
-      //fill(c, opacity);  //반은 보라색
-      fill(c);
-      ellipse(p.position.x, p.position.y, p.m, p.m);
-    }
+        
   }
+  
 }
