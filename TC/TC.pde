@@ -6,15 +6,25 @@ void setup() {
   font = createFont("NanumGothicBold", 30);
   textFont(font);
   textAlign(CENTER, CENTER);
+  textT = new timing();
 }
 void draw() {
   background(0);
-  
-  textT.fadingCtrl(5000, "IN");
+
+  textT.fadingCtrl(5000, "OUT");
   fill(255, textT.alphaVal); 
   text("손으로 저어보셈", width/2, 200);  
-  fill(255, textT.alphaVal-150); 
+  fill(255, textT.alphaVal); 
   text("ㅎㅎㅎㅎㅎㅎㅎ ", width/2, 260);
+  println(textT.opa_increse);
+  if (textT.alphaVal == 255) {
+    textT.fadingCtrl(5000, "OUT");
+    fill(255, textT.alphaVal); 
+    text("손으로 저어보셈", width/2, 200);  
+    fill(255, textT.alphaVal); 
+    text("ㅎㅎㅎㅎㅎㅎㅎ ", width/2, 260);
+    println(textT.opa_increse);
+  }
 }
 
 
@@ -23,7 +33,7 @@ class timing {
   float opa_increse;
   int alphaVal;
   float frame_rate;
-  
+
   timing() {
     frame_rate = 30;
     alphaVal = 0;
