@@ -19,10 +19,10 @@ void draw() {
 
 
 class timing {
-  int time_stamp;
+  float time_stamp;
   float opa_increse;
-  float alphaVal;
-  int frame_rate;
+  int alphaVal;
+  float frame_rate;
   
   timing() {
     frame_rate = 30;

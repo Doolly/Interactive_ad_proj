@@ -2,14 +2,13 @@ boolean mode;
 PImage rgbImage = createImage(640, 480, RGB);
 PImage userImage = createImage(640, 480, RGB);
 int [] userMap;
-
+int[] userList;
 void phase_3() {
   background(0);
   kinect.update(); 
   rgbImage = kinect.rgbImage(); 
   rgbImage.loadPixels(); // prepare the color pixels
 
-  int[] userList = kinect.getUsers();
   if (userList.length>0) { 
     userMap = kinect.userMap();
     userImage.loadPixels(); //현재 사이즈로 부르고

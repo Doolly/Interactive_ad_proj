@@ -13,7 +13,7 @@ PImage result;
 /*------ Functions ------*/
 
 /*------ Global Variables ------*/
-int seq = 1;
+int seq = 3;
 
 int time_ms;
 int time_stamp;
@@ -23,7 +23,7 @@ void setup() {
   size(1440, 800, P3D);
   //size(640, 480,P2D);
   //fullScreen(P2D);
-  
+
   smooth(4);
 
   routine_movie = new Movie(this, "sample_video_1.mp4");
@@ -45,11 +45,17 @@ void setup() {
 
 void draw() {
   background(0, 60);
+  kinect.update();
+  userList = kinect.getUsers();
+  if (userList.length>0) {
+  }
 
   if (seq == -1) {
     routine_movie.loop();
     image(routine_movie, 0, 0, width, height);
-  } else if (seq == 0) { // 사람이 오면으로 변경
+  } 
+  if (seq == 0) { // 사람이 오면으로 변경   userList.length>0
+    seq = 0;
     routine_movie.stop();
     opening_movie.play();
     image(opening_movie, 0, 0, width, height);
@@ -67,9 +73,10 @@ void draw() {
     phase1_DP();
   } else if (seq == 2) {
     text_1();
-   
   } else if (seq == 3) {
-    //phase2_kinect_update();
-    phase_3();
+    phase2_kinect_update();
+    getMotion();
+  } else if (seq == 4) {
+    text_1();
   }
 }
