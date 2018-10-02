@@ -1,4 +1,4 @@
-// todo distance mapping , userimage, new motion algorithm , filter for closest val
+// hand tracking 으로??
 PVector[] pos;
 PVector[] speed;
 PVector[] target;
@@ -8,9 +8,9 @@ PImage img;
 int closestValue = 8000;
 int closestX;
 int closestY;
-int phase_throttle = 300;
-int close_d = 300;
-int far_d = 1500;
+int phase_throttle = 500;
+int close_d = 800;
+int far_d = 1300;
 
 int cellSize = 4;  //입자 크기 파라미터
 int rows, cols;
@@ -53,9 +53,6 @@ void phase1_kinect_update() {
       }
     }
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  int[] userList = kinect.getUsers();
-  if (userList.length>0) { 
     userMap = kinect.userMap();
     userImage.loadPixels(); //현재 사이즈로 부르고
     userImage.resize(640, 480); // 줄였다가
@@ -63,7 +60,7 @@ void phase1_kinect_update() {
       for (int x = 0; x< 640; x++) { 
         int i = x + y * 640; 
         if (userMap[i]!=0) { 
-          userImage.pixels[i] = userImage.pixels[i] = color(200, 2, 200);
+          userImage.pixels[i] = userImage.pixels[i] = color(255, 255, 255);
         } else {
           userImage.pixels[i] = color(0);
         }
@@ -71,8 +68,6 @@ void phase1_kinect_update() {
     }
     userImage.updatePixels();  //갱신된 배열값들을 이미지로 로드
     userImage.resize(width, height); // 다시 늘려서
-  }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void phase1_DP_update(int mx, int my) {
@@ -93,15 +88,34 @@ void phase1_DP_update(int mx, int my) {
       }
     }
   }
+  int windowsize = 30;
+  int sumD = 0;
+  int sumX = 0;
+  int sumY= 0;
+  int [] senser_D = new int[30];
+  int [] senser_X = new int[30];
+  int [] senser_Y = new int[30];
+  for (int k=0; k<windowsize; k++) {
+    senser_D[k]=closestValue;
+    senser_X[k]=closestX;
+    senser_Y[k]=closestY;
+    sumD += senser_D[k];
+    sumX += senser_X[k];
+    sumY += senser_Y[k];
+  }
+  closestValue = sumD/windowsize;
+  closestX = sumX/windowsize;
+  closestY = sumY/windowsize;
+  constrain(closestValue, far_d, phase_throttle);
 }
 
 void phase1_DP() {
-  tint(200, 60);
+  tint(255, 60);
   image(userImage, 0, 0); //최종 이미지 출력  int[] userList = kinect.getUsers();
- 
+
   //tint(120, 60);
   //image(kinect.depthImage(), 0, 0, width, height);
-  
+
   //fill(0, 60);   //window opacity ctrl  잔상 조절, 배경 검정
   //rect(0, 0, width, height);
 
@@ -113,7 +127,10 @@ void phase1_DP() {
     for (int i=0; i<rows; i++) {
       int x = i*cellSize + cellSize/2;   // x position
       int y = j*cellSize + cellSize/2;   // y position
-      float z = mouseX;    //map(closestValue, close_d, far_d, 0, 700);
+      float z = map(closestValue, far_d, close_d, 0, 150);
+      if (closestValue<close_d) {
+        z=map(closestValue, close_d, phase_throttle, 150, 700);
+      }
       int loc = x + y*width;             // Pixel array location
       color c = img.pixels[loc];         // Grab the color of selected image
 

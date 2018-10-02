@@ -10,48 +10,69 @@ void setup() {
 }
 void draw() {
   background(0);
-
-  textT.fadingCtrl(5000, "OUT");
-  fill(255, textT.alphaVal); 
-  text("손으로 저어보셈", width/2, 200);  
-  fill(255, textT.alphaVal); 
-  text("ㅎㅎㅎㅎㅎㅎㅎ ", width/2, 260);
-  println(textT.opa_increse);
-  if (textT.alphaVal == 255) {
-    textT.fadingCtrl(5000, "OUT");
-    fill(255, textT.alphaVal); 
-    text("손으로 저어보셈", width/2, 200);  
-    fill(255, textT.alphaVal); 
-    text("ㅎㅎㅎㅎㅎㅎㅎ ", width/2, 260);
-    println(textT.opa_increse);
-  }
+  textT.text_2("See-Through","나를 온전히 마주하여 들여다보다");
 }
 
 
 class timing {
-  float time_stamp;
+  final int DISPLAY_TIME = 6000; 
+  int lastTime; 
+  float alphaVal = 0;
   float opa_increse;
-  int alphaVal;
-  float frame_rate;
-
+  float opa_diff = 150;
+  int frame_rate = 30;
+  float a = 255.0 * frame_rate/(DISPLAY_TIME/(255/opa_diff)); 
+  int fade =1;
+  int line = 0;
   timing() {
-    frame_rate = 30;
-    alphaVal = 0;
-    opa_increse = 0;
-    time_stamp = 0;
   }
 
-  void fadingCtrl(int interrupt_t, String IO) {
-    opa_increse = 255.0 * frame_rate/interrupt_t; 
-    if (millis() - time_stamp >= interrupt_t) { 
-      time_stamp = millis();
-      if (IO == "IN") {
-        opa_increse = abs(opa_increse);
-      } else if (IO == "OUT") {
-        opa_increse = -abs(opa_increse);
+  void text_1(String t1) {
+    if (millis() - lastTime >= DISPLAY_TIME) { //5초 주기 if문 스탑워치 키기
+      lastTime = millis();
+      a*=-1;
+      if (fade ==1) {
+        alphaVal = 255+opa_diff;
+      } else {
+        alphaVal = 0;
       }
+      fade *= -1;
+      line ++;
     }
-    alphaVal += opa_increse;
-    alphaVal = constrain(alphaVal, 0, 255);
+    alphaVal += a;
+
+    if (fade == 1) {
+      fill(255, alphaVal); 
+      text(t1, width/2, 200);
+    } else if (fade == -1) {
+      fill(255, alphaVal-opa_diff); 
+      text(t1, width/2, 200);  
+    }
+  }
+  void text_2(String t1, String t2) {
+    if (millis() - lastTime >= DISPLAY_TIME) { //5초 주기 if문 스탑워치 키기
+      lastTime = millis();
+      a*=-1;
+      if (fade ==1) {
+        alphaVal = 255+opa_diff;
+      } else {
+        alphaVal = 0;
+      }
+      fade *= -1;
+      line ++;
+    }
+    alphaVal += a;
+    
+    if (fade == 1) {
+      fill(255, alphaVal); 
+      text(t1, width/2, 200);  
+      fill(255, alphaVal-opa_diff); 
+      text(t2, width/2, 260);
+    } else if (fade == -1) {
+      fill(255, alphaVal-opa_diff); 
+      text(t1, width/2, 200);  
+      fill(255, alphaVal);
+      text(t2, width/2, 260);
+    }
   }
 }

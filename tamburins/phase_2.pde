@@ -35,22 +35,22 @@ int getMotion() {
       kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, pre_rightHand);
     }
 
- //if (getDistance(leftShoulder, rightHand)<15 || getDistance(rightShoulder, leftHand)<15) {
- //     fill(255);
- //     text("touch", width/2, 150);
- //     text(getDistance(leftShoulder, rightHand), width/2, 100);
- //   }
- //   else if (getDistance(pre_rightHand, rightHand)>15) {
- //     fill(255);
- //     text("through ", width/2, 150);
- //     text(getDistance(pre_rightHand, rightHand), width/2, 100);
- //   }
- //   else if (getDistance(leftHand, rightHand)<15) {
+ if (getDistance(leftShoulder, rightHand)<15 || getDistance(rightShoulder, leftHand)<15) {
+      fill(255);
+      text("touch", width/2, 150);
+      text(getDistance(leftShoulder, rightHand), width/2, 100);
+    }
+    else if (getDistance(pre_rightHand, rightHand)>15) {
+      fill(255);
+      text("through ", width/2, 150);
+      text(getDistance(pre_rightHand, rightHand), width/2, 100);
+    }
+    else if (getDistance(leftHand, rightHand)<15) {
 
- //     fill(255);
- //     text("clap", width/2, 150);
- //     text(getDistance(leftHand, rightHand), width/2, 100);
- //   }
+      fill(255);
+      text("clap", width/2, 150);
+      text(getDistance(leftHand, rightHand), width/2, 100);
+    }
    
   }
   return 0;
