@@ -1,13 +1,19 @@
 PFont font; 
 timing textT;
+PImage text1_bg;
+PImage text2_bg;
+PImage text3_bg;
 
 void text_setup() {
   //String[] fontList = PFont.list();
   //printArray(fontList);
-  font = createFont("NanumGothicBold", 30);
+  font = createFont("NotoSansCJKkr-Bold", 40);
   textFont(font);
   textAlign(CENTER, CENTER);
   textT = new timing();
+  text1_bg = loadImage("text1_bg.png");
+  text2_bg = loadImage("text2_bg.png");
+  text3_bg = loadImage("text3_bg.png");
 }
 
 class timing {
@@ -20,10 +26,11 @@ class timing {
   float a = 255.0 * frame_rate/(DISPLAY_TIME/(255/opa_diff)); 
   int fade =1;
   int line = 0;
-  
-  timing() {
-  }
 
+  timing() {
+  } 
+
+ 
   void text_1(String t1) {
     if (millis() - lastTime >= DISPLAY_TIME) { //5초 주기 if문 스탑워치 키기
       lastTime = millis();
@@ -65,7 +72,7 @@ class timing {
       fill(255, alphaVal-opa_diff); 
       text(t2, width/2, 260);
     } else if (fade == -1) {
-      fill(255, alphaVal-opa_diff); 
+      fill(255, alphaVal); 
       text(t1, width/2, 200);  
       fill(255, alphaVal);
       text(t2, width/2, 260);

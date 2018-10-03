@@ -4,13 +4,16 @@ PVector[] speed;
 PVector[] target;
 PVector[] tar_speed;
 PImage img;
-PImage bground;
+PImage phase1_bg;
 int closestValue = 8000;
 int closestX;
 int closestY;
 int phase_throttle = 500;
 int close_d = 800;
 int far_d = 1300;
+
+int [] userMap;
+int[] userList;
 
 int cellSize = 4;  //입자 크기 파라미터
 int rows, cols;
@@ -26,7 +29,7 @@ void phase1_setup () {
   target=new PVector[rows*cols];
   tar_speed=new PVector[rows*cols];
   img = loadImage("pumkin.png");
-  bground = loadImage("phase1_bg.png");
+  phase1_bg = loadImage("phase1_bg.png");
   for (int j=0; j<cols; j++) {
     for (int i=0; i<rows; i++) {
       int x = i*cellSize + cellSize/2;   
@@ -41,7 +44,7 @@ void phase1_setup () {
 
 void phase1_kinect_update() {
   closestValue = 8000;
-  kinect.update();
+  //kinect.update();
   int[] depthValues = kinect.depthMap();
   for (int y = 0; y< 480; y++) { // for each row
     for (int x = 0; x< 640; x++) { //for each pixel in each row
@@ -55,8 +58,7 @@ void phase1_kinect_update() {
     }
   }
 }
-
-void userimg_DP(int R, int G, int B) {
+void userimg_DP(float uR, float uG, float uB, float uA, float bR, float bG, float bB, float bA) {
   userMap = kinect.userMap();
   userImage.loadPixels(); //현재 사이즈로 부르고
   userImage.resize(640, 480); // 줄였다가
@@ -64,9 +66,28 @@ void userimg_DP(int R, int G, int B) {
     for (int x = 0; x< 640; x++) { 
       int i = x + y * 640; 
       if (userMap[i]!=0) { 
-        userImage.pixels[i] = userImage.pixels[i] = color(R, G, B);
+        userImage.pixels[i] = color(uR, uG, uB, uA);
       } else {
-        userImage.pixels[i] = color(0);
+        userImage.pixels[i] = color(bR, bG, bB, bA);
+      }
+    }
+  }
+  userImage.updatePixels();  //갱신된 배열값들을 이미지로 로드
+  userImage.resize(width, height); // 다시 늘려서
+  image(userImage, 0, 0);
+}
+
+void userimg_DP(float R, float G, float B, float al, PImage back) {
+  userMap = kinect.userMap();
+  userImage.loadPixels(); //현재 사이즈로 부르고
+  userImage.resize(640, 480); // 줄였다가
+  for (int y = 0; y< 480; y++) { //때려박고
+    for (int x = 0; x< 640; x++) { 
+      int i = x + y * 640; 
+      if (userMap[i]!=0) { 
+        userImage.pixels[i] = userImage.pixels[i] = color(R, G, B, al);
+      } else {
+        userImage.pixels[i] = back.pixels[i];
       }
     }
   }

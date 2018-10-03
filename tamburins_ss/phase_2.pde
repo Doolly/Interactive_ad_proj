@@ -1,12 +1,12 @@
 PVector leftHand = new PVector();
 PVector rightHand = new PVector();
-PVector pre_leftHand = new PVector();
-PVector pre_rightHand = new PVector();
 PVector normalizedPosition = new PVector(2.25, 1.66); //(640, 480)->(1440, 800)
 PVector leftShoulder = new PVector();
 PVector rightShoulder = new PVector();
 
 PVector rightHand_cv = new PVector();
+PVector leftHand_cv = new PVector();
+
 
 ArrayList<ParticleSystem> systems;
 int count_sys = 5;
@@ -16,17 +16,26 @@ float partSize;
 
 void phase2_kinect_update() {
   kinect.update();
-  userimg_DP(200, 200, 200);
+  userimg_DP(200, 200, 200, 255, 4, 54, 101, 255);
 }
+
 void phase2_shape_setup() {
   noStroke();
   systems = new ArrayList<ParticleSystem>();
-  partSize = random(70, 100);
+  partSize = random(150, 200);
   flower[0] = loadImage("flower[1].png");
   flower[1] = loadImage("flower[1].png");
   flower[2] = loadImage("flower[2].png");
   flower[3] = loadImage("flower[3].png");
   flower[4] = loadImage("flower[2].png");
+
+  color[] particleClr = new color[]{ 
+    color(137, 138, 230), 
+    color(137, 138, 230), 
+    color(249, 177, 43), 
+    color(216, 89, 26), 
+    color(249, 177, 43)
+  };
 
   for (int i = 0; i < count_sys; i++) {
     shapes[i] = createShape();
@@ -41,7 +50,8 @@ void phase2_shape_setup() {
     shapes[i].endShape();
   }
   for (int i = 0; i < count_sys; i++) {
-    systems.add(new ParticleSystem(300, new PVector(random(0, width), random(0, height)), shapes[i]));
+    systems.add(new ParticleSystem(300, new PVector(random(width*0.1, width*0.9), random(height*0.1, height*0.9)), shapes[i], particleClr[i]));
+    //systems.remove(i);
   }
 }
 
@@ -53,32 +63,13 @@ void getMotion() {
     if ( kinect.isTrackingSkeleton(userId)) {
       //drawSkeleton(userId);
       drawJoint(userId, SimpleOpenNI.SKEL_RIGHT_HAND);
+      drawJoint(userId, SimpleOpenNI.SKEL_LEFT_HAND);
 
       kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_SHOULDER, leftShoulder);      
       kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_SHOULDER, rightShoulder);
       kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, leftHand);      
       kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, rightHand);
-      ////getDistance(leftHand, rightHand);
-      ////getDistance(pre_rightHand, rightHand);
-
-      //kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_LEFT_HAND, pre_leftHand);      
-      //kinect.getJointPositionSkeleton(userId, SimpleOpenNI.SKEL_RIGHT_HAND, pre_rightHand);
     }
-
-    //if (getDistance(leftShoulder, rightHand)<15 || getDistance(rightShoulder, leftHand)<15) {
-    //  fill(255);
-    //  text("touch", width/2, 150);
-    //  text(getDistance(leftShoulder, rightHand), width/2, 100);
-    //} else if (getDistance(pre_rightHand, rightHand)>15) {
-    //  fill(255);
-    //  text("through ", width/2, 150);
-    //  text(getDistance(pre_rightHand, rightHand), width/2, 100);
-    //} else if (getDistance(leftHand, rightHand)<15) {
-
-    //  fill(255);
-    //  text("clap", width/2, 150);
-    //  text(getDistance(leftHand, rightHand), width/2, 100);
-    //}
   }
 }
 float getDistance (PVector a, PVector b) {
@@ -126,10 +117,15 @@ void drawJoint(int userId, int jointID) {
   kinect.convertRealWorldToProjective(joint, convertedJoint);
   PVector pixelPosition = PVectorPlus.mult(convertedJoint, normalizedPosition); //변환
   ellipse(pixelPosition.x, pixelPosition.y, 15, 15);
-  rightHand_cv = pixelPosition;
+  if (jointID == SimpleOpenNI.SKEL_RIGHT_HAND) {
+    rightHand_cv = pixelPosition;
+  } else if (jointID == SimpleOpenNI.SKEL_LEFT_HAND) {
+    leftHand_cv = pixelPosition;
+  }
   noStroke();
   fill(255, 0, 0);
   ellipse(rightHand_cv.x, rightHand_cv.y, 15, 15);
+  ellipse(leftHand_cv.x, leftHand_cv.y, 15, 15);
 }
 
 void onNewUser(SimpleOpenNI kinect, int userID) {
