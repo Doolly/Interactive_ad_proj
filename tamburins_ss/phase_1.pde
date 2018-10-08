@@ -4,7 +4,6 @@ PVector[] speed;
 PVector[] target;
 PVector[] tar_speed;
 PImage img;
-PImage phase1_bg;
 int closestValue = 8000;
 int closestX;
 int closestY;
@@ -15,10 +14,10 @@ int far_d = 1300;
 int [] userMap;
 int[] userList;
 
-int cellSize = 4;  //입자 크기 파라미터
+int cellSize = 5;  //입자 크기 파라미터
 int rows, cols;
 float count = 0;
-float number = 4;  // 속도 조절 파라미터
+float number = 8;  // 속도 조절 파라미터
 float rotation = 0;
 
 void phase1_setup () {
@@ -29,7 +28,6 @@ void phase1_setup () {
   target=new PVector[rows*cols];
   tar_speed=new PVector[rows*cols];
   img = loadImage("pumkin.png");
-  phase1_bg = loadImage("phase1_bg.png");
   for (int j=0; j<cols; j++) {
     for (int i=0; i<rows; i++) {
       int x = i*cellSize + cellSize/2;   
@@ -57,43 +55,6 @@ void phase1_kinect_update() {
       }
     }
   }
-}
-void userimg_DP(float uR, float uG, float uB, float uA, float bR, float bG, float bB, float bA) {
-  userMap = kinect.userMap();
-  userImage.loadPixels(); //현재 사이즈로 부르고
-  userImage.resize(640, 480); // 줄였다가
-  for (int y = 0; y< 480; y++) { //때려박고
-    for (int x = 0; x< 640; x++) { 
-      int i = x + y * 640; 
-      if (userMap[i]!=0) { 
-        userImage.pixels[i] = color(uR, uG, uB, uA);
-      } else {
-        userImage.pixels[i] = color(bR, bG, bB, bA);
-      }
-    }
-  }
-  userImage.updatePixels();  //갱신된 배열값들을 이미지로 로드
-  userImage.resize(width, height); // 다시 늘려서
-  image(userImage, 0, 0);
-}
-
-void userimg_DP(float R, float G, float B, float al, PImage back) {
-  userMap = kinect.userMap();
-  userImage.loadPixels(); //현재 사이즈로 부르고
-  userImage.resize(640, 480); // 줄였다가
-  for (int y = 0; y< 480; y++) { //때려박고
-    for (int x = 0; x< 640; x++) { 
-      int i = x + y * 640; 
-      if (userMap[i]!=0) { 
-        userImage.pixels[i] = userImage.pixels[i] = color(R, G, B, al);
-      } else {
-        userImage.pixels[i] = back.pixels[i];
-      }
-    }
-  }
-  userImage.updatePixels();  //갱신된 배열값들을 이미지로 로드
-  userImage.resize(width, height); // 다시 늘려서
-  image(userImage, 0, 0);
 }
 
 void phase1_DP_update(int mx, int my) {
@@ -136,15 +97,6 @@ void phase1_DP_update(int mx, int my) {
 }
 
 void phase1_DP() {
-  //tint(255, 60);
-  //image(userImage, 0, 0); //최종 이미지 출력  int[] userList = kinect.getUsers();
-
-  //tint(120, 60);
-  //image(kinect.depthImage(), 0, 0, width, height);
-
-  //fill(0, 60);   //window opacity ctrl  잔상 조절, 배경 검정
-  //rect(0, 0, width, height);
-
   noStroke();
   fill (255, 0, 0);
   ellipse(closestX, closestY, 15, 15);
@@ -168,4 +120,5 @@ void phase1_DP() {
       popMatrix();
     }
   }
+ 
 }

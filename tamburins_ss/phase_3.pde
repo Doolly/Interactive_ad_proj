@@ -1,4 +1,3 @@
-boolean mode;
 PImage rgbImage = createImage(640, 480, RGB);
 PImage userImage = createImage(640, 480, RGB);
 float r=0;
@@ -8,15 +7,13 @@ int rgb_portion=100;
 boolean target1_start=false;
 boolean target2_start=false;
 boolean target3_start=false;
+boolean frame_start=false;
+
 float current_r, current_g, current_b;
 
-
-//PImage userImage_color = createImage(640, 480, RGB);
+PVector torso_cv = new PVector();
 
 void phase_3() {
-  //frameRate(30);
-  //colorMode(RGB);
-  //colorMode(HSB, 360, 100, 100);
   rgbImage = kinect.rgbImage(); 
   rgbImage.loadPixels(); // prepare the color pixels
   userMap = kinect.userMap();
@@ -34,22 +31,25 @@ void phase_3() {
 
         userImage.pixels[i] = color(r, g, b);
       } else {
-        userImage.pixels[i] = color(340, 75, 14);
+        float r=red(phase3_bg.pixels[i]);
+        float g=green(phase3_bg.pixels[i]);
+        float b=blue(phase3_bg.pixels[i]);
+        userImage.pixels[i] = color(r, g, b);
       }
     }
   }
-  if (getDistance(leftShoulder, rightHand)<15) target1_start=true;
 
   if (target3_start==false) rgb_portion=0;
   if (target1_start==true) {
-    target2_start=ColorSet(149, 53, 81);
+    target2_start=ColorSet(255, 84, 84);
     if (target2_start==true) target1_start = false;
   }
   if (target2_start==true) {
-    target3_start = ColorSet(20, 250, 8);
+    target3_start = ColorSet(255, 166, 255);
     if (target3_start==true) target2_start = false;
   }
   if (target3_start==true) rgb_portion++;
+  if (rgb_portion==100) frame_start=true;
 
 
   userImage.updatePixels();  //갱신된 배열값들을 이미지로 로드
@@ -57,22 +57,20 @@ void phase_3() {
   image(userImage, 0, 0);
   //fill(255);
   //textSize(16);
-  //text("Frame rate: " + int(frameRate), width/2, 100);
-  fill(255);
-  textSize(16);
-  text(getDistance(leftShoulder, rightHand), width/2, 100);
+  ////text("Frame rate: " + int(frameRate), width/2, 100);
+  //text(theta, width/2, 100);
 }
 
 
 boolean ColorSet(int r, int g, int b) {
-  if (r>current_r) current_r++;
-  else if (r<current_r) current_r--;
-  if (g>current_g) current_g++;
-  else if (g<current_g) current_g--;
-  if (b>current_b) current_b++;
-  else if (b<current_b) current_b--;
-
-  println("r: "+current_r+" g:"+current_g+" b:"+current_b);
-  if (r==current_r&&g==current_g&&b==current_b) return true;
+  int speed=3;
+  if (r>current_r) current_r+=speed;
+  else if (r<current_r) current_r-=speed;
+  if (g>current_g) current_g+=speed;
+  else if (g<current_g) current_g-=speed;
+  if (b>current_b) current_b+=speed;
+  else if (b<current_b) current_b-=speed;
+  
+  if (abs(r-current_r)<speed && abs(g-current_g)<speed && abs(b-current_b)<speed) return true;
   else return false;
 }
