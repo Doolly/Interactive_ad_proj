@@ -6,16 +6,15 @@ class ParticleSystem {
   boolean clicked;
   color c;
   float g = 0.005;
-
   PShape part;
-  float partSize;
+  float opacity;
 
-  ParticleSystem(int num, PVector _origin, PShape pic) {  //초기 개수랑 출몰위치
+  ParticleSystem(int num, PVector _origin, PShape pic, color a) {  //초기 개수랑 출몰위치
     particles = new ArrayList<Particle>();
     origin = _origin.copy();
-    c = color(random(0, 255), random(0, 255), random(0, 255));
-    sys_size = 20;
-    partSize = sys_size + 15;
+    c= a;
+    //c = color(random(0, 255), random(0, 255), random(0, 255));
+    sys_size = 30;
     poped = false;
     clicked = false;
     part = pic;
@@ -52,10 +51,11 @@ class ParticleSystem {
       Particle p = particles.get(i);
       p.updateVelocityAndPosition();
 
-      float opacity = p.velocity.mag() * 128;  //느리면 안보이게 빠르면 잘보이게
+      float opacity_v = p.velocity.mag() * 128;  //느리면 안보이게 빠르면 잘보이게
+
       //stroke(3);
-      fill(c, opacity);  
-      
+      fill(c, opacity+opacity_v);  
+
       ellipse(p.position.x, p.position.y, abs(p.m), abs(p.m));
       if (!poped) {  // 안터졌으면
         pushMatrix();
@@ -69,8 +69,13 @@ class ParticleSystem {
     }
   }
 
+  //void ascend(PVector mouse){
+  //for (int i = particles.size()-1; i >= 0; i--) {
+  //      Particle p = particles.get(i);
+  //}
+
   void run(PVector mouse) {
-    Particle m = new Particle(mouse, 50);
+    Particle m = new Particle(mouse, 70);
     for (int me = 0; me < particles.size(); me++) {
       Particle p = particles.get(me);
       p.resetAcceleration();
