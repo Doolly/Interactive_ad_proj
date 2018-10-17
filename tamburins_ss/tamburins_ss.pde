@@ -67,6 +67,7 @@ void draw() {
     float md = opening_movie.duration();
     float mt = opening_movie.time();
     if (mt > md-0.5) {
+      opening_movie.stop();
       textT.lastTime = millis();
       seq = 1;
     }
@@ -186,6 +187,8 @@ void draw() {
     if (mt > md-0.5) {
       delay(5000);
       seq = -1;
+      textT.line = 0;
+      frameCount=-1;
     }
   }
 }

@@ -127,7 +127,7 @@ void draw() {
       }
     }
 
-    if (p2_count>6) {
+    if (p2_count>3) {
       if (p2_wait==false) {
         for (ParticleSystem ps : systems) {
           if (ps.clicked) {

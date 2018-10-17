@@ -7,9 +7,9 @@ PImage img;
 int closestValue = 8000;
 int closestX;
 int closestY;
-int phase_throttle = 500;
-int close_d = 800;
-int far_d = 1300;
+int phase_throttle = 900;
+int close_d = 1250;
+int far_d = 1600;
 
 int [] userMap;
 int[] userList;
@@ -105,9 +105,10 @@ void phase1_DP() {
     for (int i=0; i<rows; i++) {
       int x = i*cellSize + cellSize/2;   // x position
       int y = j*cellSize + cellSize/2;   // y position
-      float z = map(closestValue, far_d, close_d, 0, 150);
+      //float z = map(closestValue, far_d, close_d, 0, 150);
+      float z = 0;
       if (closestValue<close_d) {
-        z=map(closestValue, close_d, phase_throttle, 150, 700);
+        z=map(closestValue, close_d, phase_throttle, 10, 60);
       }
       int loc = x + y*width;             // Pixel array location
       color c = img.pixels[loc];         // Grab the color of selected image
